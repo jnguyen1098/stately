@@ -4,21 +4,23 @@
 #define ALPHABET_SIZE 2
 #define NUM_CHAR 128
 #define NUM_STATE 2
-
-enum input {
-    INVALID,
-    ZERO_CHAR,
-    ONE_CHAR,
-};
-
-enum state {
-    REJECTING,
-    ACCEPTING,
-};
+#define LABEL_SIZE 128
 
 struct state_machine {
-    enum input char_map[NUM_CHAR];
-    enum state state_table[NUM_STATE][ALPHABET_SIZE + 1];
+    int state;
+    int (*map)(const void *);
+    int state_table[NUM_STATE][ALPHABET_SIZE + 1];
 };
+
+int get_state(struct state_machine *machine)
+{
+    return machine->state;
+}
+
+int get_next_state(struct state_machine *machine, const void *input)
+{
+    machine->state = machine->state_table[machine->state][machine->map(input)];
+    return get_state(machine);
+}
 
 #endif
