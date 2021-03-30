@@ -7,7 +7,7 @@
 #define LABEL_SIZE 128
 
 struct state_machine {
-    int state;
+    int curr_state;
     int (*map)(const void *);
     int state_table[NUM_STATE][ALPHABET_SIZE + 1];
 };
@@ -16,17 +16,17 @@ struct state_machine {
 
 int get_state(struct state_machine *machine)
 {
-    return machine->state;
+    return machine->curr_state;
 }
 
 int suppose_state(struct state_machine *machine, int state, const void *input)
 {
-    return machine->state_table[machine->state][machine->map(input)];
+    return machine->state_table[machine->curr_state][machine->map(input)];
 }
 
 int get_next_state(struct state_machine *machine, const void *input)
 {
-    machine->state = suppose_state(machine, machine->state, input);
+    machine->curr_state = suppose_state(machine, machine->curr_state, input);
     return get_state(machine);
 }
 

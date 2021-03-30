@@ -52,7 +52,7 @@ int map_str(const void *str)
 int main(void)
 {
     struct state_machine machine = {
-        .state = ACCEPTING,
+        .curr_state = ACCEPTING,
         .map = map_str,
         .state_table = {
             [REJECTING] = {
