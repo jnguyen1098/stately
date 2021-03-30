@@ -1,6 +1,6 @@
 #include <stdio.h>
 
-#include "sirin.h"
+#include "stately.h"
 
 enum input char_map[NUM_CHAR] = {
     ['0'] = ZERO_CHAR,
