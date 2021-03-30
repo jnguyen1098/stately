@@ -7,11 +7,11 @@ enum input char_map[NUM_CHAR] = {
     ['1'] = ONE_CHAR,
 };
 
-enum input _input_mapper(char input) {
+enum input input_mapper(char input) {
     return char_map[input];
 }
 
-enum input input_mapper(char input)
+enum input _input_mapper(char input)
 {
     if (input == '0') {
         return ZERO_CHAR;
