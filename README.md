@@ -367,6 +367,8 @@ puts(GET_STATE(machine) == ACCEPTING ? "Input accepted" : "Input rejected");
 
 ## Testing
 
+In the `examples/` folder there is a `makefile` you can use to run all the example programs.
+
 In creating my example FSAs I create self-checking test harnesses that (usually) rely on test cases of the form:
 
 ```c
