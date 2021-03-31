@@ -4,11 +4,6 @@
 
 #include "stately.h"
 
-// Inputs
-enum input {
-    INVALID, _0, _1, _2, _3, _4, _5, _6, _7, _8, _9, HYPHEN,
-};
-
 enum states {
     TRAP,                    // ([12]\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01]))
     FIRST_DIGIT,             //  [12]
@@ -24,24 +19,19 @@ enum states {
     SECOND_DIGIT_ZERO,       //                            ( [1-9]|      |     )
     SECOND_DIGIT_ONE_TWO,    //                            (      |    \d|     )
     SECOND_DIGIT_THREE,      //                            (      |      | [01])
-    ACCEPT                   // ACCEPT
+    ACCEPT                   //                                           ACCEPT
 };
 
-char *texts[] = {
-    "TRAP", "FIRST_DIGIT", "SECOND_DIGIT", "THIRD_DIGIT", "FOURTH_DIGIT",
-    "FIRST_HYPHEN", "FIRST_DIGIT_OF_MONTH", "SECOND_DIGIT_JAN_TO_SEP",
-    "SECOND_DIGIT_OCT_TO_DEC", "SECOND_HYPHEN", "FIRST_DIGIT_OF_DAY",
-    "SECOND_DIGIT_ZERO", "SECOND_DIGIT_ONE_TWO", "SECOND_DIGIT_THREE"
+enum input {
+    INVALID, _0, _1, _2, _3, _4, _5, _6, _7, _8, _9, HYPHEN,
 };
 
-// Lookup table
 const int char_map[128] = {
     ['0'] = _0, ['1'] = _1, ['2'] = _2, ['3'] = _3, ['4'] = _4,
     ['5'] = _5, ['6'] = _6, ['7'] = _7, ['8'] = _8, ['9'] = _9,
     ['-'] = HYPHEN
 };
 
-// Mapping function
 int map_chr(const void *chr) {
     return char_map[(int)*(char *)chr];
 }
@@ -705,12 +695,7 @@ int main(void)
         for (int c = 0; tests[i].input[c]; c++) {
             (void)GET_NEXT_STATE(machine, &tests[i].input[c]);
         }
-        if (GET_STATE(machine) != tests[i].expected_result) {
-            puts("");
-            printf("    Expected %s but got %s\n", texts[tests[i].expected_result], texts[GET_STATE(machine)]);
-            puts("");
-            return 1;
-        }
+        assert(GET_STATE(machine) == tests[i].expected_result);
     }
 
     return 0;
