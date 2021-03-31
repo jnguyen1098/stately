@@ -435,4 +435,6 @@ int map_chr(const void *chr) {
 }
 ```
 
-TODO: note that you dont need to specify ordering, or initialize at all (test this)
+## More Reading
+
+[Modern-day regex vs DFA regex](https://swtch.com/~rsc/regexp/regexp1.html)
