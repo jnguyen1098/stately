@@ -6,7 +6,7 @@
 
 Polymorphic template-based finite-state machine library written in C, delivered through a single header file. I made this for my game programming class (we had to implement state machine AI) and figured I'd probably make good use of it in other projects, so here it is.
 
-Thanks to C's initialization quirks, invalid inputs and trap (rejecting) states are handled automatically.
+Thanks to C's initialization quirks, invalid `char` inputs and trap (rejecting) states are handled automatically.
 
 States are implemented internally as `int`s, but as you see in the `examples` folder, `enum`s can (and should) be used for readability.
 
