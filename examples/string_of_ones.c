@@ -5,7 +5,7 @@
 #include "stately.h"
 
 enum input { INVALID, ZERO_CHAR, ONE_CHAR };
-enum state { REJECTING, ACCEPTING };
+enum state { TRAP, ACCEPTING };
 
 const char char_map[128] = {
     ['0'] = ZERO_CHAR,
@@ -48,22 +48,8 @@ int main(void)
 
         // States
         .state_table = {
-
-            // Reject state transitions
-            [REJECTING] = {
-                [INVALID]   = REJECTING,
-                [ZERO_CHAR] = REJECTING,
-                [ONE_CHAR]  = REJECTING,
-            },
-
-            // Accept state transitions
-            [ACCEPTING] = {
-                [INVALID]   = REJECTING,
-                [ZERO_CHAR] = REJECTING,
-                [ONE_CHAR]  = ACCEPTING,
-            }
-
-        }
+        [ACCEPTING] = {[ONE_CHAR] = ACCEPTING}
+    }
 
     };
 
@@ -74,9 +60,9 @@ int main(void)
 
     struct test_case tests[] = {
         { "111111111", ACCEPTING },
-        { "         ", REJECTING },
-        { "111111110", REJECTING },
-        { "000000000", REJECTING },
+        { "         ", TRAP },
+        { "111111110", TRAP },
+        { "000000000", TRAP },
         { "",          ACCEPTING },
     };
 
