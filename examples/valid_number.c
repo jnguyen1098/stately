@@ -27,6 +27,12 @@ int main(void)
     *  DFA that validates a number to the rules of *
     *  LeetCode problem #0065 (Valid Number)       *
     *  https://leetcode.com/problems/valid-number/ *
+    *                                              *
+    *  Relevant forum post:                        *
+    *                                              *
+    *  https://leetcode.com/problems/valid-number/ *
+    *  discuss/1054071/c-efficient-dfafinite-state *
+    *  -machine-guaranteed-on                      *
     ***********************************************/
 
     struct state_machine machine = {
