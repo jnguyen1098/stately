@@ -1,12 +1,12 @@
 #ifndef STATELY_H
 #define STATELY_H
 
-#ifndef ALPHABET_SIZE
-# define ALPHABET_SIZE 1024
+#ifndef MAX_ALPHABET_SIZE
+# define MAX_ALPHABET_SIZE 256
 #endif
 
-#ifndef NUM_STATE
-# define NUM_STATE 32
+#ifndef MAX_STATES
+# define MAX_STATES 128
 #endif
 
 #define SET_STATE(machine, state)(machine.curr_state = state)
@@ -17,7 +17,7 @@
 struct state_machine {
     int curr_state;
     int (*map)(const void *);
-    int state_table[NUM_STATE][ALPHABET_SIZE + 1];
+    int state_table[MAX_STATES][MAX_ALPHABET_SIZE + 1];
 };
 
 #endif

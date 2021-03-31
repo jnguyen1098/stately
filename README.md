@@ -16,7 +16,7 @@ A `state_machine` `struct` is declared as follows:
 struct state_machine {
     int curr_state;
     int (*map)(const void *);
-    int state_table[NUM_STATE][ALPHABET_SIZE + 1];
+    int state_table[MAX_STATES][MAX_ALPHABET_SIZE + 1];
 };
 ```
 
@@ -26,7 +26,7 @@ Where:
 
 * `map()` is a template function allowing the caller to map an arbitrary input to a state (`int`). This is analogous to the `cmp()` parameter in libc `qsort`. Just like `qsort`'s `cmp()`, `map()` takes in a `const void *` and outputs an `int`.
 
-* `state_table[NUM_STATE][ALPHABET_SIZE + 1]` is the table used to map the states to each other by means of transitions. It is a 2-dimensional array of `int`s, each row representing the possible transitions from each state and each column representing the input symbol it takes in.
+* `state_table[MAX_STATES][MAX_ALPHABET_SIZE + 1]` is the table used to map the states to each other by means of transitions. It is a 2-dimensional array of `int`s, each row representing the possible transitions from each state and each column representing the input symbol it takes in.
 
 In actually manipulating the machine, the following interface is exposed (as macros):
 
