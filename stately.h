@@ -12,22 +12,8 @@ struct state_machine {
     int state_table[NUM_STATE][ALPHABET_SIZE + 1];
 };
 
-// TODO turn these into defines LUL
-
-int get_state(struct state_machine *machine)
-{
-    return machine->curr_state;
-}
-
-int suppose_state(struct state_machine *machine, int state, const void *input)
-{
-    return machine->state_table[machine->curr_state][machine->map(input)];
-}
-
-int get_next_state(struct state_machine *machine, const void *input)
-{
-    machine->curr_state = suppose_state(machine, machine->curr_state, input);
-    return get_state(machine);
-}
+#define GET_STATE(machine)(machine.curr_state)
+#define SUPPOSE_STATE(machine, state, input)(machine.state_table[machine.curr_state][machine.map(input)])
+#define GET_NEXT_STATE(machine, input)(machine.curr_state = SUPPOSE_STATE(machine, machine.curr_state, input), GET_STATE(machine))
 
 #endif
