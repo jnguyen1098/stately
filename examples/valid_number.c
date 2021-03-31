@@ -4,8 +4,10 @@
 
 #include "stately.h"
 
+// Inputs
 enum input { INVALID, DIGIT, SCIENTIFIC_E, PLUS_MINUS, PERIOD };
 
+// Mapping function
 int map_chr(const void *chr) {
     char c = *(char *)chr;
     if (c >= '0' && c <= '9')
@@ -21,25 +23,11 @@ int map_chr(const void *chr) {
 
 int main(void)
 {
-   /***************************************
-    *  DFA that accepts either the empty  *
-    *  string, or any sequence of 1s.     *
-    *                                     *
-    *       1                    0,1      *
-    *    +-----+               +----+     *
-    *    |     |               |    |     *
-    *    |    \ /              |   \ /    *
-    * +--+---------+       +---+--------+ *
-    * |            |       |            | *
-    * | Accepting  |       |  Rejecting | *
-    * |            |       |            | *
-    * +-----+------+       +------------+ *
-    *       |                    / \      *
-    *       |                     |       *
-    *       |                     |       *
-    *       +---------------------+       *
-    *                 0                   *
-    **************************************/
+   /************************************************
+    *  DFA that validates a number to the rules of *
+    *  LeetCode problem #0065 (Valid Number)       *
+    *  https://leetcode.com/problems/valid-number/ *
+    ***********************************************/
 
     struct state_machine machine = {
        
@@ -124,13 +112,8 @@ int main(void)
         for (int c = 0; tests[i].input[c]; c++) {
             (void)GET_NEXT_STATE(machine, &tests[i].input[c]);
         }
-        //assert(GET_STATE(machine) == tests[i].expected_result);
-        if (GET_STATE(machine) != tests[i].expected_result) {
-            printf("Expected %d but got %d\n", tests[i].expected_result, GET_STATE(machine));
-        }
+        assert(GET_STATE(machine) == tests[i].expected_result);
     }
-
-    puts("Complete");
 
     return 0;
 }
