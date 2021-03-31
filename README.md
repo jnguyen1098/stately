@@ -28,6 +28,16 @@ Where:
 
 * `state_table[NUM_STATE][ALPHABET_SIZE + 1]` is the table used to map the states to each other by means of transitions. It is a 2-dimensional array of `int`s, each row representing the possible transitions from each state and each column representing the input symbol it takes in.
 
+In actually manipulating the machine, the following interface is exposed (as macros):
+
+* `SET_STATE(machine, state)` will set the machine's `curr_state` to argument `state`
+
+* `GET_STATE(machine)` will retrieve the machine's `curr_state`
+
+* `GET_NEXT_STATE(machine, input)` will feed the machine argument `input`, mutate its `curr_state` member and then return the `curr_state` just as you would with `GET_STATE(machine)`
+
+* `SUPPOSE_STATE(machine, state, input)` is a purely functional macro that returns a given next state without changing or relying on the current state (`curr_state`). You specify the machine, the _supposed_ state, and the hypothetical input you would give it, and it would give you the _hypothetical_ output in return.
+
 Taking a look at a simple example, we examine this DFA program that feeds a string to the finite-state machine character-by-character:
 
 ```c
@@ -343,6 +353,86 @@ as everything else is mapped to the `TRAP` state, which we assumed to be the C d
     }
 ```
 
-shown at first, but it is sometimes worth listing every transition for the sake of understanding and clarity. That being said, in some of the code samples in the `examples/` folder, I do not include the trap state. The first subscript (row) is not encoded in the array, but is rather used with the second subscript (column) as a displacement to get to the next state. So, by relying on C's default initialization quirk, we can delegate the most common transition in DFAs (implied rejection) to `'\0'`. For more in-depth examples of this initialization quirk, look at `valid_number.c` and `date_validator.c`.
+shown at first, but it is sometimes worth listing every transition for the sake of understanding and clarity. That being said, in some of the code samples in the `examples/` folder, I do not include the trap state. The first subscript (row) is not encoded in the array, but is actually used with the second subscript (column) as a displacement to get to the next state. So, by relying on C's default initialization quirk, we can default the most common transition in DFAs (implied rejection) to `0`. For more in-depth examples of this initialization quirk, look at `valid_number.c` and `date_validator.c`.
+
+In actually using the machine, for this particular example one could perform:
+
+```c
+for (int i = 0; input_string[i] != '\0'; i++) {
+    GET_NEXT_STATE(machine, &input_string[i]);
+}
+
+puts(GET_STATE(machine) == ACCEPTING ? "Input accepted" : "Input rejected");
+```
+
+## Testing
+
+In creating my example FSAs I create self-checking test harnesses that (usually) rely on test cases of the form:
+
+```c
+struct test_case {
+    char input[16];
+    int expected_result;
+};
+```
+
+and then with an array of these `test_case`s, testing the stately machines using a test loop of the form:
+
+```c
+    for (int i = 0; i < (int)(sizeof(tests) / sizeof(*tests)); i++) {
+        printf("Testing case '%s'\n", tests[i].input);
+        SET_STATE(machine, FIRST_DIGIT);
+        for (int c = 0; tests[i].input[c]; c++) {
+            (void)GET_NEXT_STATE(machine, &tests[i].input[c]);
+        }
+        if (GET_STATE(machine) != tests[i].expected_result) {
+            puts("");
+            printf("    Expected %s but got %s\n", texts[tests[i].expected_result], texts[GET_STATE(machine)]);
+            puts("");
+            return 1;
+        }
+    }
+```
+
+For a more in-depth gander at this, look at `date_validator.c` (and if you scroll to lines 634-698 you will get a taste of how robust the `TRAP` state / `INVALID` input initialization quirk is).
+
+## Random Examples
+
+_An example of creating a `map()` function that uses a `struct` to derive a state_:
+
+```c
+enum input { INVALID, EVEN_INPUT, ODD_INPUT };
+enum state { TRAP, START, EVEN_STATE, ODD_STATE };
+
+struct request {
+    int a;
+    int b;
+    int c;
+};
+
+int request_to_state(const void *req_ptr) {
+    struct request req = *(struct request *)req_ptr;
+    return (req.a + req.b + req.c) % 2 ? ODD_INPUT : EVEN_INPUT;
+}
+```
+
+_Relying on a more explicit way of declaring `INVALID` input (and not relying on initializaiton quirks)_:
+
+```c
+enum input { INVALID, DIGIT, SCIENTIFIC_E, PLUS_MINUS, PERIOD };
+
+int map_chr(const void *chr) {
+    char c = *(char *)chr;
+    if (c >= '0' && c <= '9')
+        return DIGIT;
+    if (c == 'E' || c == 'e')
+        return SCIENTIFIC_E;
+    if (c == '+' || c == '-')
+        return PLUS_MINUS;
+    if (c == '.')
+        return PERIOD;
+    return INVALID;
+}
+```
 
 TODO: note that you dont need to specify ordering, or initialize at all (test this)

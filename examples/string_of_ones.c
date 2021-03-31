@@ -48,8 +48,22 @@ int main(void)
 
         // States
         .state_table = {
-        [ACCEPTING] = {[ONE_CHAR] = ACCEPTING}
-    }
+
+            // Reject state transitions
+            [TRAP] = {
+                [INVALID]   = TRAP,
+                [ZERO_CHAR] = TRAP,
+                [ONE_CHAR]  = TRAP,
+            },
+
+            // Accept state transitions
+            [ACCEPTING] = {
+                [INVALID]   = TRAP,
+                [ZERO_CHAR] = TRAP,
+                [ONE_CHAR]  = ACCEPTING,
+            }
+
+        }
 
     };
 
