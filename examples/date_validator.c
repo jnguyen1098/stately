@@ -64,9 +64,6 @@ int main(void)
         // States
         .state_table = {
 
-            // Immediate death
-            [TRAP] = {},
-
             [FIRST_DIGIT] = {
                 [_1] = SECOND_DIGIT,
                 [_2] = SECOND_DIGIT,

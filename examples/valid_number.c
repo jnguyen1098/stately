@@ -40,9 +40,6 @@ int main(void)
         // States
         .state_table = {
 
-            // TRAP STATE
-            [0] = {},
-
             [1] = {
                 [PLUS_MINUS] = 2,
                 [DIGIT]      = 3,
