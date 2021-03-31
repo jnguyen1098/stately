@@ -1,2 +1,2 @@
 # stately
-![](https://i.imgur.com/LExKxmZ.png)
+![](https://i.imgur.com/fkDVKlP.png)
