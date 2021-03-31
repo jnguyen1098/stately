@@ -1,5 +1,5 @@
 <center>
-    <img src=https://i.imgur.com/scNvoFm.png>
+    <img src="https://i.imgur.com/scNvoFm.png">
 </center>
 
 # stately
