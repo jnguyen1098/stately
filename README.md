@@ -4,8 +4,6 @@
 
 # stately
 
-(hello to my ta jason k pls notice me)
-
 Polymorphic template-based finite-state machine library written in C, delivered through a single header file. I made this for my game programming class (we had to implement state machine AI) and figured I'd probably make good use of it in other projects, so here it is.
 
 Thanks to C's initialization quirks, trap (rejecting) states are handled automatically, and if you use `char` is the input medium, invalid inputs are also automatically handled.
